@@ -1,0 +1,167 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import CustomTitle from "../components/CustomTitle.astro";
+---
+
+<MainLayout
+  title="Astro Pokédex — Static, Fast, Beautiful"
+  description="A minimalist Pokédex built with Astro and Tailwind CSS v4 — view transitions, responsive columns, and crisp UX."
+>
+  <section class="relative overflow-hidden rounded-[var(--radius-2xl)] glass-strong p-6 sm:p-10">
+    <div class="pointer-events-none absolute inset-0 opacity-60">
+      <div
+        class="absolute -left-24 -top-24 size-[420px] rounded-full blur-3xl"
+        style="background: color-mix(in oklab, var(--color-accent) 25%, transparent);"
+      ></div>
+      <div
+        class="absolute -right-24 -bottom-24 size-[520px] rounded-full blur-3xl"
+        style="background: color-mix(in oklab, var(--color-accent-2) 20%, transparent);"
+      ></div>
+    </div>
+
+    <div class="relative grid gap-8 md:grid-cols-12 md:items-center">
+      <div class="md:col-span-7">
+        <h1 class="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+          A <span class="text-gradient">breathtaking</span> Pokédex.
+          <span class="block text-white/60 text-2xl sm:text-3xl mt-2">
+            Static by default. Smooth like an SPA.
+          </span>
+        </h1>
+
+        <p class="mt-5 max-w-prose text-pretty text-base text-white/70 sm:text-lg">
+          This project demonstrates how Astro + Tailwind CSS v4 can deliver a
+          premium UI: responsive columns, semantic structure, and view transitions that keep navigation feeling alive.
+        </p>
+
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href="/pokemons/1"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black shadow-sm shadow-black/30 hover:translate-y-[-1px] hover:shadow-md transition focus-visible:focus-ring"
+          >
+            Open Pokédex <span aria-hidden="true">→</span>
+          </a>
+
+          <a
+            href="/about"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
+          >
+            Design notes
+          </a>
+        </div>
+
+        <div class="mt-7 grid gap-3 sm:grid-cols-3">
+          <div class="glass rounded-2xl px-4 py-3">
+            <div class="text-xs text-white/60">Layout</div>
+            <div class="mt-1 text-sm font-semibold text-white">Columns + Grid</div>
+          </div>
+          <div class="glass rounded-2xl px-4 py-3">
+            <div class="text-xs text-white/60">Navigation</div>
+            <div class="mt-1 text-sm font-semibold text-white">View transitions</div>
+          </div>
+          <div class="glass rounded-2xl px-4 py-3">
+            <div class="text-xs text-white/60">UX</div>
+            <div class="mt-1 text-sm font-semibold text-white">Accessible defaults</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-5">
+        <div class="glass rounded-[var(--radius-2xl)] p-4 sm:p-6">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-white/60">2025 UI kit</span>
+            <span class="rounded-full bg-white/5 px-3 py-1 text-xs text-white/70 ring-1 ring-white/10">Tailwind v4</span>
+          </div>
+
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <div class="glass rounded-2xl p-4">
+              <div class="text-xs text-white/60">Surface</div>
+              <div class="mt-2 h-10 rounded-xl bg-white/5 ring-1 ring-white/10"></div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-xs text-white/60">Accent</div>
+              <div class="mt-2 h-10 rounded-xl ring-1 ring-white/10" style="background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));"></div>
+            </div>
+            <div class="glass rounded-2xl p-4 col-span-2">
+              <div class="text-xs text-white/60">Motion</div>
+              <p class="mt-2 text-sm text-white/70">
+                Transitions respect <code class="rounded bg-black/30 px-1.5 py-0.5 text-white/80">prefers-reduced-motion</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-5 text-xs text-white/55">
+            Tip: keep styling in markup (Tailwind classes) to avoid <code class="rounded bg-black/30 px-1.5 py-0.5 text-white/80">@apply</code> pitfalls in scoped styles.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <CustomTitle
+      title="A layout that adapts"
+      subtitle="We use Tailwind’s columns utilities to create a masonry-like Pokédex list (no JS), and grid/flex for structure."
+    />
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-12">
+      <div class="lg:col-span-7 glass rounded-[var(--radius-2xl)] p-6">
+        <h2 class="text-lg font-semibold">Columns (masonry)</h2>
+        <p class="mt-2 text-sm text-white/70">
+          Perfect for cards: <code class="rounded bg-black/30 px-1.5 py-0.5 text-white/80">columns-2 sm:columns-3 lg:columns-4</code> +
+          <code class="rounded bg-black/30 px-1.5 py-0.5 text-white/80">break-inside-avoid</code>.
+        </p>
+
+        <div class="mt-4 columns-2 gap-4 sm:columns-3 lg:columns-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div class="mb-4 break-inside-avoid glass rounded-2xl p-4">
+              <div class="flex items-center justify-between">
+                <div class="text-xs text-white/60">Card</div>
+                <div class="text-xs text-white/40">#{i + 1}</div>
+              </div>
+              <div class="mt-3 h-16 rounded-xl bg-white/5 ring-1 ring-white/10"></div>
+              <div class="mt-3 h-3 w-2/3 rounded bg-white/10"></div>
+              <div class="mt-2 h-3 w-1/2 rounded bg-white/10"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 glass rounded-[var(--radius-2xl)] p-6">
+        <h2 class="text-lg font-semibold">Grid + Flex</h2>
+        <p class="mt-2 text-sm text-white/70">
+          We combine grid (overall layout) and flex (alignment) for predictable, accessible structure.
+        </p>
+
+        <div class="mt-4 grid gap-3">
+          <div class="glass rounded-2xl p-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Semantic sections</span>
+              <span class="text-xs text-white/60">header • main • footer</span>
+            </div>
+          </div>
+
+          <div class="glass rounded-2xl p-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Responsive nav</span>
+              <span class="text-xs text-white/60">grid on mobile</span>
+            </div>
+          </div>
+
+          <div class="glass rounded-2xl p-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-semibold">Micro-interactions</span>
+              <span class="text-xs text-white/60">hover • focus</span>
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="/pokemons/1"
+          class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
+        >
+          Start browsing Pokémon
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

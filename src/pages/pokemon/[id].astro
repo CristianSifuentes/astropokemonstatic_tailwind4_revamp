@@ -1,0 +1,88 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import PokemonCard from "../../components/PokemonCard.astro";
+import CustomTitle from "../../components/CustomTitle.astro";
+import type { PokemonListResponse } from "../../data/pokemon-list.response";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+  const { results } = (await resp.json()) as PokemonListResponse;
+
+  return results.map(({ name, url }) => {
+    const id = url.split("/").at(-2)!;
+    return { params: { id }, props: { name, id } };
+  });
+}
+
+const { id } = Astro.params;
+const { name } = Astro.props;
+
+const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+const crySrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
+---
+
+<MainLayout title={`${name} — Cry`}>
+  <section class="space-y-6">
+    <div class="flex items-center justify-between gap-3">
+      <a
+        href="/pokemons/1"
+        class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
+      >
+        ← Back
+      </a>
+
+      <a
+        href={`/pokemons/${name}`}
+        class="rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm shadow-black/30 hover:translate-y-[-1px] hover:shadow-md transition focus-visible:focus-ring"
+      >
+        Details →
+      </a>
+    </div>
+
+    <CustomTitle
+      title={`${name.charAt(0).toUpperCase() + name.slice(1)} • Cry`}
+      subtitle="A fun extra: official artwork + audio. Still styled like a premium product page."
+    />
+
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-start">
+      <div class="lg:col-span-6">
+        <PokemonCard name={name} id={id} image={image} size="lg" />
+      </div>
+
+      <div class="lg:col-span-6 glass rounded-[var(--radius-2xl)] p-6 sm:p-8">
+        <h2 class="text-lg font-semibold">Listen</h2>
+        <p class="mt-2 text-sm text-white/70">
+          Audio comes from the public “cries” dataset. Use it sparingly (and responsibly) — it’s loud in the best way.
+        </p>
+
+        <div class="mt-5">
+          <audio controls class="w-full">
+            <source src={crySrc} type="audio/ogg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <a
+            href={crySrc}
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
+          >
+            Open audio
+          </a>
+          <a
+            href={`https://pokeapi.co/api/v2/pokemon/${name}`}
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
+          >
+            PokeAPI JSON
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -1,0 +1,70 @@
+---
+const { name, id, image, size = "sm" } = Astro.props;
+
+const isLg = size === "lg";
+const pad = isLg ? "p-6" : "p-4";
+const imgSize = isLg ? "size-56" : "size-24";
+---
+
+<a
+  href={`/pokemons/${name}`}
+  class:list={[
+    "group relative block break-inside-avoid overflow-hidden rounded-[var(--radius-2xl)] glass transition",
+    "ring-1 ring-white/10 hover:ring-white/20",
+    "hover:translate-y-[-2px] hover:bg-white/10",
+    pad,
+  ]}
+  aria-label={`Open ${name} details`}
+>
+  <!-- Ambient highlight -->
+  <div
+    class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
+    style={`background: radial-gradient(600px circle at 20% 0%, color-mix(in oklab, var(--color-accent) 20%, transparent), transparent 50%),
+                    radial-gradient(400px circle at 90% 30%, color-mix(in oklab, var(--color-accent-2) 14%, transparent), transparent 55%);`}
+  ></div>
+
+  <div class="relative flex items-center gap-4">
+    <div
+      class:list={[
+        "grid place-items-center rounded-2xl bg-white/5 ring-1 ring-white/10",
+        isLg ? "p-6" : "p-3",
+      ]}
+    >
+      <img
+        src={image}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        class:list={[
+          imgSize,
+          "select-none drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)] transition duration-300",
+          "group-hover:scale-[1.04] group-hover:rotate-[-1deg]",
+        ]}
+      />
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-medium text-white/60">#{String(id).padStart(4, "0")}</span>
+        <span class="h-1 w-1 rounded-full bg-white/30"></span>
+        <span class="text-xs text-white/55">Gen‑0 archive</span>
+      </div>
+
+      <h2 class="mt-1 truncate text-lg font-semibold tracking-tight text-white">
+        {name.charAt(0).toUpperCase() + name.slice(1)}
+      </h2>
+
+      <p class="mt-2 line-clamp-2 text-sm text-white/65">
+        A clean, fast, static route — built with Astro islands and styled with Tailwind CSS v4.
+      </p>
+
+      <div class="mt-4 flex items-center gap-2">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs text-white/70 ring-1 ring-white/10">
+          <span class="inline-block size-1.5 rounded-full bg-[var(--color-accent)]"></span>
+          Details
+        </span>
+        <span class="text-xs text-white/45">→</span>
+      </div>
+    </div>
+  </div>
+</a>

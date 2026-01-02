@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4 (CSS-first) — minimalist 2025 aesthetic */
+
+@theme {
+  /* Brand */
+  --color-accent: oklch(0.78 0.15 244);
+  --color-accent-2: oklch(0.75 0.16 25);
+
+  /* Surfaces */
+  --color-bg: oklch(0.14 0.03 260);
+  --color-surface: oklch(0.18 0.03 260);
+  --color-surface-2: oklch(0.22 0.03 260);
+
+  /* Text */
+  --color-fg: oklch(0.95 0.02 260);
+  --color-fg-muted: oklch(0.78 0.03 260);
+
+  /* Radii */
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  /* Column widths (Tailwind columns-*) */
+  --container-4xs: 14rem; /* enables columns-4xs */
+}
+
+@layer base {
+  :root { color-scheme: dark; }
+
+  html {
+    scroll-behavior: smooth;
+    text-rendering: geometricPrecision;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1200px circle at 20% 10%, color-mix(in oklab, var(--color-accent) 25%, transparent), transparent 55%),
+      radial-gradient(900px circle at 80% 0%, color-mix(in oklab, var(--color-accent-2) 18%, transparent), transparent 60%),
+      radial-gradient(1000px circle at 50% 110%, color-mix(in oklab, white 6%, transparent), transparent 55%),
+      linear-gradient(180deg, color-mix(in oklab, var(--color-bg) 95%, black), var(--color-bg));
+    color: var(--color-fg);
+  }
+
+  a { text-underline-offset: 0.2em; }
+
+  ::selection { background: color-mix(in oklab, var(--color-accent) 35%, transparent); }
+}
+
+@layer components {
+  .glass {
+    background: color-mix(in oklab, var(--color-surface) 72%, transparent);
+    border: 1px solid color-mix(in oklab, white 10%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .glass-strong {
+    background: color-mix(in oklab, var(--color-surface-2) 80%, transparent);
+    border: 1px solid color-mix(in oklab, white 12%, transparent);
+    backdrop-filter: blur(18px);
+  }
+
+  .text-gradient {
+    background-image: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    outline: none;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-accent) 55%, transparent),
+      0 0 0 6px color-mix(in oklab, var(--color-accent) 18%, transparent);
+  }
+
+  .safe-area {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .break-inside-avoid { break-inside: avoid; }
+}

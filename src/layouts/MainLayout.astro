@@ -1,0 +1,77 @@
+---
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
+import { siteInfo } from "../data/site-info";
+import { ClientRouter } from "astro:transitions";
+
+const {
+  title = siteInfo.title,
+  description = siteInfo.description,
+  ogImage = siteInfo.ogImage,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="h-full" transition:name="root" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph (nice previews) -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <!-- Client-side routing + View Transitions -->
+    <ClientRouter fallback="animate" />
+  </head>
+
+  <body class="relative min-h-screen">
+    <a
+      href="#content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black"
+    >
+      Skip to content
+    </a>
+
+    <Navbar />
+
+    <main id="content" class="safe-area mx-auto max-w-6xl py-10">
+      <slot />
+    </main>
+
+    <footer class="safe-area mx-auto max-w-6xl pb-10">
+      <div class="glass rounded-[var(--radius-2xl)] px-6 py-5 text-sm text-white/70">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-white/60">
+            Built with <span class="text-white">Astro</span> + <span class="text-white">Tailwind v4</span>.
+            Designed for speed, clarity, and that “wow” minimalism.
+          </p>
+          <div class="flex items-center gap-3">
+            <a
+              href="/pokemons/1"
+              class="rounded-xl bg-white/5 px-3 py-2 text-white/70 ring-1 ring-white/10 hover:bg-white/10 hover:text-white focus-visible:focus-ring"
+            >
+              Pokédex
+            </a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              class="rounded-xl bg-white/5 px-3 py-2 text-white/70 ring-1 ring-white/10 hover:bg-white/10 hover:text-white focus-visible:focus-ring"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

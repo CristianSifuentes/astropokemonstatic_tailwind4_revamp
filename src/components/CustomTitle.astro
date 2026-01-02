@@ -1,0 +1,30 @@
+---
+const { title, subtitle } = Astro.props;
+---
+
+<div class="relative">
+  <div class="flex items-end justify-between gap-4">
+    <div>
+      <h1 class="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+        <span class="text-gradient">{title}</span>
+      </h1>
+      {subtitle && (
+        <p class="mt-2 max-w-prose text-pretty text-sm text-white/70 sm:text-base">
+          {subtitle}
+        </p>
+      )}
+    </div>
+
+    <div class="hidden sm:block">
+      <div class="glass rounded-2xl px-4 py-3 text-xs text-white/70">
+        <div class="flex items-center gap-2">
+          <span class="inline-block size-2 rounded-full bg-[var(--color-accent)]"></span>
+          <span>Astro + Tailwind v4</span>
+        </div>
+        <div class="mt-1 text-white/50">Responsive • Semantic • Minimal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+</div>
