@@ -1,27 +1,33 @@
 @import "tailwindcss";
 
-/* Tailwind CSS v4 (CSS-first) — minimalist 2025 aesthetic */
+/*
+  Tailwind v4 global style contract.
+  This file defines:
+  1) Theme tokens consumed by utility classes and custom CSS.
+  2) Reusable component classes (`glass`, `glass-strong`, etc.).
+  3) Utility helpers for focus/safe area/masonry behavior.
+*/
 
 @theme {
-  /* Brand */
+  /* Brand accent tokens used by gradients, badges, and stat bars. */
   --color-accent: oklch(0.78 0.15 244);
   --color-accent-2: oklch(0.75 0.16 25);
 
-  /* Surfaces */
+  /* Surface/background palette used across layout containers. */
   --color-bg: oklch(0.14 0.03 260);
   --color-surface: oklch(0.18 0.03 260);
   --color-surface-2: oklch(0.22 0.03 260);
 
-  /* Text */
+  /* Foreground text colors. */
   --color-fg: oklch(0.95 0.02 260);
   --color-fg-muted: oklch(0.78 0.03 260);
 
-  /* Radii */
+  /* Radius tokens for cards/panels/buttons. */
   --radius-xl: 1.25rem;
   --radius-2xl: 1.75rem;
 
-  /* Column widths (Tailwind columns-*) */
-  --container-4xs: 14rem; /* enables columns-4xs */
+  /* Enables `columns-4xs` utility in Tailwind's generated scale. */
+  --container-4xs: 14rem;
 }
 
 @layer base {
@@ -34,6 +40,7 @@
 
   body {
     min-height: 100vh;
+    /* Multi-layer gradient background used by every route via MainLayout import. */
     background:
       radial-gradient(1200px circle at 20% 10%, color-mix(in oklab, var(--color-accent) 25%, transparent), transparent 55%),
       radial-gradient(900px circle at 80% 0%, color-mix(in oklab, var(--color-accent-2) 18%, transparent), transparent 60%),
@@ -48,18 +55,21 @@
 }
 
 @layer components {
+  /* Glass morphism base panel. */
   .glass {
     background: color-mix(in oklab, var(--color-surface) 72%, transparent);
     border: 1px solid color-mix(in oklab, white 10%, transparent);
     backdrop-filter: blur(14px);
   }
 
+  /* Stronger variant used in hero/visual emphasis blocks. */
   .glass-strong {
     background: color-mix(in oklab, var(--color-surface-2) 80%, transparent);
     border: 1px solid color-mix(in oklab, white 12%, transparent);
     backdrop-filter: blur(18px);
   }
 
+  /* Gradient text utility for headings and branding. */
   .text-gradient {
     background-image: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
     -webkit-background-clip: text;
@@ -67,6 +77,7 @@
     color: transparent;
   }
 
+  /* Noise overlay effect used by Navbar wrapper (`.noise`). */
   .noise::before {
     content: "";
     position: absolute;
@@ -79,6 +90,7 @@
 }
 
 @layer utilities {
+  /* Focus helper assigned through `focus-visible:focus-ring`. */
   .focus-ring {
     outline: none;
     box-shadow:
@@ -86,10 +98,12 @@
       0 0 0 6px color-mix(in oklab, var(--color-accent) 18%, transparent);
   }
 
+  /* iOS safe-area aware horizontal padding utility for edge-to-edge devices. */
   .safe-area {
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 
+  /* Prevents cards from splitting between CSS column tracks. */
   .break-inside-avoid { break-inside: avoid; }
 }

@@ -6,6 +6,7 @@ import type { PokemonListResponse } from "../../data/pokemon-list.response";
 
 export const prerender = true;
 
+// Build-time route generation: creates /pokemons/1..8 for first 151 Pokémon.
 export async function getStaticPaths() {
   const TOTAL_POKEMONS = 151;
   const totalPages = Math.ceil(TOTAL_POKEMONS / 20);
@@ -15,14 +16,17 @@ export async function getStaticPaths() {
   }));
 }
 
+// Incoming dynamic segment from URL.
 const { page } = Astro.params;
 const currentPage = Number(page ?? 1);
 
+// Data source: paginated Pokémon list from PokeAPI.
 const response = await fetch(
   `https://pokeapi.co/api/v2/pokemon?limit=20&offset=${(currentPage - 1) * 20}`
 );
 const data: PokemonListResponse = await response.json();
 
+// Navigation helpers for previous/next pagination controls.
 const prev = currentPage > 1 ? `/pokemons/${currentPage - 1}` : null;
 const next = currentPage < 8 ? `/pokemons/${currentPage + 1}` : null;
 ---
@@ -34,6 +38,7 @@ const next = currentPage < 8 ? `/pokemons/${currentPage + 1}` : null;
       subtitle="A masonry-like list using Tailwind v4 columns — clean, responsive, and zero JavaScript."
     />
 
+    <!-- Top pagination toolbar -->
     <div class="glass rounded-[var(--radius-2xl)] p-4 sm:p-5">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-sm text-white/70">
@@ -43,35 +48,21 @@ const next = currentPage < 8 ? `/pokemons/${currentPage + 1}` : null;
 
         <div class="flex items-center gap-2">
           {prev ? (
-            <a
-              href={prev}
-              class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
-            >
-              ← Prev
-            </a>
+            <a href={prev} class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm font-semibold text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring">← Prev</a>
           ) : (
-            <span class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm text-white/35 ring-1 ring-white/10">
-              ← Prev
-            </span>
+            <span class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm text-white/35 ring-1 ring-white/10">← Prev</span>
           )}
 
           {next ? (
-            <a
-              href={next}
-              class="inline-flex items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm shadow-black/30 hover:translate-y-[-1px] hover:shadow-md transition focus-visible:focus-ring"
-            >
-              Next →
-            </a>
+            <a href={next} class="inline-flex items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm shadow-black/30 hover:translate-y-[-1px] hover:shadow-md transition focus-visible:focus-ring">Next →</a>
           ) : (
-            <span class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm text-white/35 ring-1 ring-white/10">
-              Next →
-            </span>
+            <span class="inline-flex items-center justify-center rounded-xl bg-white/5 px-3 py-2 text-sm text-white/35 ring-1 ring-white/10">Next →</span>
           )}
         </div>
       </div>
     </div>
 
-    <!-- Masonry list via columns -->
+    <!-- Masonry list via CSS columns. Each API item maps to PokemonCard props. -->
     <div class="columns-1 gap-4 sm:columns-2 sm:gap-5 lg:columns-3 xl:columns-4">
       {data.results.map((pokemon) => (
         <div class="mb-4 break-inside-avoid sm:mb-5">
@@ -84,6 +75,7 @@ const next = currentPage < 8 ? `/pokemons/${currentPage + 1}` : null;
       ))}
     </div>
 
+    <!-- Bottom pagination summary -->
     <div class="glass rounded-[var(--radius-2xl)] p-4 sm:p-5">
       <div class="flex items-center justify-between">
         <p class="text-sm text-white/70">
@@ -91,22 +83,8 @@ const next = currentPage < 8 ? `/pokemons/${currentPage + 1}` : null;
         </p>
 
         <div class="flex items-center gap-2">
-          {prev && (
-            <a
-              href={prev}
-              class="rounded-xl bg-white/5 px-3 py-2 text-sm text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
-            >
-              ←
-            </a>
-          )}
-          {next && (
-            <a
-              href={next}
-              class="rounded-xl bg-white/5 px-3 py-2 text-sm text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring"
-            >
-              →
-            </a>
-          )}
+          {prev && <a href={prev} class="rounded-xl bg-white/5 px-3 py-2 text-sm text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring">←</a>}
+          {next && <a href={next} class="rounded-xl bg-white/5 px-3 py-2 text-sm text-white/80 ring-1 ring-white/10 hover:bg-white/10 hover:text-white transition focus-visible:focus-ring">→</a>}
         </div>
       </div>
     </div>

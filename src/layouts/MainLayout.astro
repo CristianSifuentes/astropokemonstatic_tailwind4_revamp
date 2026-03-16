@@ -1,9 +1,17 @@
 ---
+// Global stylesheet is imported once at the layout level so every route inherits design tokens.
 import "../styles/global.css";
+
+// Shared navigation shell.
 import Navbar from "../components/Navbar.astro";
+
+// Centralized site-level defaults (title/description/og image).
 import { siteInfo } from "../data/site-info";
+
+// Enables Astro View Transitions + client-side route swaps.
 import { ClientRouter } from "astro:transitions";
 
+// Every page can override these props; fallback values come from `siteInfo`.
 const {
   title = siteInfo.title,
   description = siteInfo.description,
@@ -14,26 +22,29 @@ const {
 <!doctype html>
 <html lang="en" class="h-full" transition:name="root" transition:animate="none">
   <head>
+    <!-- Core document metadata -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- SEO defaults, overridable per page -->
     <title>{title}</title>
     <meta name="description" content={description} />
 
-    <!-- Open Graph (nice previews) -->
+    <!-- Open Graph metadata for social previews -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
-    <!-- Client-side routing + View Transitions -->
+    <!-- SPA-like transitions while preserving Astro's multi-page rendering model -->
     <ClientRouter fallback="animate" />
   </head>
 
   <body class="relative min-h-screen">
+    <!-- Accessibility: keyboard users can jump directly to main content -->
     <a
       href="#content"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black"
@@ -41,12 +52,15 @@ const {
       Skip to content
     </a>
 
+    <!-- Global header appears on every route that uses this layout -->
     <Navbar />
 
+    <!-- `<slot />` receives page-level HTML from each route component -->
     <main id="content" class="safe-area mx-auto max-w-6xl py-10">
       <slot />
     </main>
 
+    <!-- Shared footer with internal/external quick links -->
     <footer class="safe-area mx-auto max-w-6xl pb-10">
       <div class="glass rounded-[var(--radius-2xl)] px-6 py-5 text-sm text-white/70">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -73,6 +87,5 @@ const {
         </div>
       </div>
     </footer>
-    
   </body>
 </html>
