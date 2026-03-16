@@ -1,4 +1,10 @@
 ---
+// Card used by listing routes and the cry page.
+// Props contract:
+// - `name`: slug used for route linking (`/pokemons/[name]`)
+// - `id`: numeric id used for badge text
+// - `image`: absolute artwork URL
+// - `size`: `sm` (default) | `lg` toggles paddings/image size
 const { name, id, image, size = "sm" } = Astro.props;
 
 const isLg = size === "lg";
@@ -16,7 +22,7 @@ const imgSize = isLg ? "size-56" : "size-24";
   ]}
   aria-label={`Open ${name} details`}
 >
-  <!-- Ambient highlight -->
+  <!-- Ambient gradient appears only on hover for depth -->
   <div
     class="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
     style={`background: radial-gradient(600px circle at 20% 0%, color-mix(in oklab, var(--color-accent) 20%, transparent), transparent 50%),

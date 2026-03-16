@@ -1,160 +1,63 @@
 # 🧬 Astro Pokédex — Tailwind CSS v4 Edition
 
-A **modern, artistic, and technically advanced Pokédex application** built with **Astro 5**, **Tailwind CSS v4**, and **cutting‑edge 2025 UI/UX standards**.
+A **reference-grade Astro project** that showcases static-first architecture, dynamic route prerendering, and modern Tailwind CSS v4 styling.
 
-This project is intentionally designed as a **reference-grade frontend architecture** for developers who want to learn how to combine **Astro islands**, **Tailwind CSS v4**, **CSS Grid**, **Flexbox**, and **View Transitions** in a real-world app.
+## Technical map (how files connect)
 
----
+- `src/layouts/MainLayout.astro`
+  - Imports `src/styles/global.css` once for all pages.
+  - Renders `src/components/Navbar.astro` and the shared footer.
+  - Receives per-page metadata props (`title`, `description`, `ogImage`) and falls back to `src/data/site-info.ts`.
+  - Mounts `ClientRouter` from `astro:transitions` for view transitions.
 
-## ✨ Key Features
+- `src/components/Navbar.astro`
+  - Reads `siteInfo` metadata and `Astro.url.pathname`.
+  - Uses `isActive()` helper to style current section links.
 
-- ⚡ **Astro 5 (Islands Architecture)**
-- 🎨 **Tailwind CSS v4 (Vite Plugin)**
-- 🧱 **CSS Grid + Flexbox + Columns Layout**
-- 🧠 **Semantic HTML5**
-- 🔄 **Astro View Transitions (`ClientRouter`)**
-- 📱 **Fully Responsive (Mobile‑First)**
-- 🌗 **Minimalist Dark UI (2025 Design Language)**
-- 🚫 No `@apply` in scoped styles (Tailwind v4‑safe)
-- 🧩 Strong separation of layout, components, and data
+- `src/components/PokemonCard.astro`
+  - Receives `name`, `id`, `image`, `size`.
+  - Links to `/pokemons/[name]`.
+  - Reused by list pages and cry page for consistent visual identity.
 
----
+- `src/components/CustomTitle.astro`
+  - Shared section heading component with optional subtitle.
 
-## 🗂️ Project Structure
+- `src/pages/index.astro` and `src/pages/about.astro`
+  - Static educational pages using MainLayout + CustomTitle.
 
-```txt
-src/
-├─ components/
-│  ├─ Navbar.astro
-│  ├─ PokemonCard.astro
-│  └─ CustomTitle.astro
-│
-├─ layouts/
-│  └─ MainLayout.astro
-│
-├─ pages/
-│  ├─ index.astro
-│  ├─ about.astro
-│  ├─ 404.astro
-│  └─ pokemons/
-│     ├─ [page].astro
-│     ├─ [id].astro
-│     └─ [name].astro
-│
-├─ styles/
-│  └─ global.css
-│
-├─ data/
-│  ├─ pokemon-list.response.ts
-│  └─ site-info.ts
-│
-└─ env.d.ts
-```
+- `src/pages/pokemons/[page].astro`
+  - `getStaticPaths()` creates `/pokemons/1..8`.
+  - Fetches paginated list from `https://pokeapi.co/api/v2/pokemon?limit=20&offset=...`.
+  - Maps API results into `PokemonCard` props.
 
----
+- `src/pages/pokemons/[name].astro`
+  - `getStaticPaths()` creates `/pokemons/:name` for first 151 Pokémon.
+  - Fetches full detail payload from `https://pokeapi.co/api/v2/pokemon/:name`.
+  - Extracts derived values (`id`, `image`, `types`, `stats`) for rendering.
 
-## 🧠 Architecture Philosophy
+- `src/pages/pokemon/[id].astro`
+  - `getStaticPaths()` builds `/pokemon/:id` and injects `name` in `props`.
+  - Constructs artwork and cry audio URLs from the ID.
 
-### Astro Islands
-This project uses Astro’s **islands architecture**:
-- Static HTML by default
-- Zero JS unless required
-- View transitions without SPA complexity
+- `src/data/pokemon-list.response.ts`
+  - Shared TS interfaces for list API payload.
 
-### Styling Strategy (Tailwind v4‑Safe)
-- ✅ All Tailwind utilities applied **in markup**
-- ✅ Global design tokens live in `global.css`
-- ❌ No `@apply` inside `.astro` scoped `<style>` blocks
-- ❌ No CSS Modules required
+- `astro.config.mjs`
+  - Registers Tailwind v4 Vite plugin.
 
----
+## Data flow summary
 
-## 🎨 Layout Techniques Used
+1. Astro prerenders routes at build time using `getStaticPaths()` in dynamic files.
+2. Each route performs `fetch()` to PokeAPI during build.
+3. Data is transformed into component props.
+4. Components render static HTML/CSS; ClientRouter adds smooth transitions on navigation.
 
-### Tailwind Columns (Masonry‑Style Layout)
-```html
-<section class="columns-2 sm:columns-3 lg:columns-4 gap-6">
-  <PokemonCard />
-</section>
-```
+## Scripts
 
-### Grid + Flex Hybrid
-- Grid for page structure
-- Flexbox for alignment and card internals
-- `break-inside-avoid` for column safety
+- `npm run dev` — start development server
+- `npm run build` — build static site
+- `npm run preview` — preview production build
 
----
+## License
 
-## 🔄 View Transitions
-
-This app uses **Astro View Transitions** via:
-
-```ts
-import { ClientRouter } from "astro:transitions";
-```
-
----
-
-## 📦 Dependencies
-
-```json
-{
-  "astro": "^5.16.6",
-  "tailwindcss": "^4.1.18",
-  "@tailwindcss/vite": "^4.1.18"
-}
-```
-
----
-
-## 🚀 Getting Started
-
-### ⚠️ IMPORTANT (Windows Users)
-**Do NOT run this project inside OneDrive.**
-
-Recommended path:
-```txt
-C:\dev\astropokemonstatic
-```
-
----
-
-### Installation
-
-```powershell
-Remove-Item -Recurse -Force node_modules
-Remove-Item -Force package-lock.json
-Remove-Item -Recurse -Force .astro -ErrorAction SilentlyContinue
-
-npm install
-npm run dev
-```
-
----
-
-### Development Server
-```
-http://localhost:4321
-```
-
----
-
-## 🌍 Production Build
-
-```bash
-npm run build
-npm run preview
-```
-
----
-
-## 🧠 Who This Project Is For
-
-- Frontend engineers learning **Astro + Tailwind v4**
-- Developers wanting **2025 UI/UX standards**
-- Engineers tired of over‑engineered SPAs
-
----
-
-## 📜 License
 MIT

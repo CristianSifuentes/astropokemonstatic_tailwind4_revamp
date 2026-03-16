@@ -1,4 +1,8 @@
 ---
+// Reusable section header component.
+// Props:
+// - `title`    (required): main heading text.
+// - `subtitle` (optional): supporting copy shown below heading.
 const { title, subtitle } = Astro.props;
 ---
 
@@ -15,6 +19,7 @@ const { title, subtitle } = Astro.props;
       )}
     </div>
 
+    <!-- Right badge hidden on small screens to preserve hierarchy -->
     <div class="hidden sm:block">
       <div class="glass rounded-2xl px-4 py-3 text-xs text-white/70">
         <div class="flex items-center gap-2">
@@ -26,5 +31,6 @@ const { title, subtitle } = Astro.props;
     </div>
   </div>
 
+  <!-- Visual divider separating title block from following content -->
   <div class="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
 </div>
